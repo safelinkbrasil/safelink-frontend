@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safelink | Acesso</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f7fa;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: white;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      border-radius: 12px;
+      max-width: 400px;
+      width: 100%;
+      padding: 40px;
+    }
+    .container h2 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .container .options {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin: 10px 0;
+    }
+    .container .options a {
+      color: #ff2014;
+      text-decoration: none;
+    }
+    .container .options a:hover {
+      text-decoration: underline;
+    }
+    .container button {
+      width: 100%;
+      background-color: #ff2014;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .container button:hover {
+      background-color: #cc1a10;
+    }
+    .toggle {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 13px;
+    }
+    .toggle a {
+      color: #ff2014;
+      cursor: pointer;
+    }
+    #cadastro, #login {
+      display: none;
+    }
+    #login.active, #cadastro.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="login" class="active">
+      <div style="text-align: center; margin-bottom: 20px;"><img src="img/logo.png" alt="Safelink Logo" style="height: 50px;"></div>
+      <input type="email" placeholder="E-mail" id="loginEmail" required />
+      <input type="password" placeholder="Senha" id="loginSenha" required />
+      <div class="options">
+        <label><input type="checkbox" /> Manter conectado</label>
+        <a href="#">Esqueci minha senha</a>
+      </div>
+      <button onclick="loginUsuario()">Entrar</button>
+      <div class="toggle">Não tem conta? <a onclick="mostrarCadastro()">Criar conta</a></div>
+    </div>
+
+    <div id="cadastro">
+      <div style="text-align: center; margin-bottom: 20px;"><img src="img/logo.png" alt="Safelink Logo" style="height: 50px;"></div>
+      <input type="email" placeholder="E-mail" id="cadastroEmail" required />
+      <input type="password" placeholder="Senha" id="cadastroSenha" required />
+      <button onclick="cadastrarUsuario()">Cadastrar</button>
+      <div class="toggle">Já tem conta? <a onclick="mostrarLogin()">Fazer login</a></div>
+    </div>
+  </div>
+
+  <script>
+    function mostrarCadastro() {
+      document.getElementById("login").classList.remove("active");
+      document.getElementById("cadastro").classList.add("active");
+    }
+
+    function mostrarLogin() {
+      document.getElementById("cadastro").classList.remove("active");
+      document.getElementById("login").classList.add("active");
+    }
+
+    async function loginUsuario() {
+      const email = document.getElementById("loginEmail").value;
+      const senha = document.getElementById("loginSenha").value;
+
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+      });
+
+      const resposta = await res.json();
+
+      if (res.ok && resposta.sucesso) {
+        localStorage.setItem("token", resposta.token);
+        window.location.href = "index.html";
+      } else {
+        alert("Erro: " + resposta.mensagem);
+      }
+    }
+
+    async function cadastrarUsuario() {
+      const email = document.getElementById("cadastroEmail").value;
+      const senha = document.getElementById("cadastroSenha").value;
+
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+      });
+
+      if (res.ok) {
+        alert("Cadastro realizado! Fazendo login...");
+        loginUsuario(); // login automático após cadastro
+      } else {
+        const erro = await res.json();
+        alert("Erro: " + erro.mensagem);
+      }
+    }
+  </script>
+</body>
+</html>

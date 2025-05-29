@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safelink | Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <aside class="sidebar expanded" id="sidebar">
+    <div class="top">
+      <img src="img/logo.png" alt="Safelink Logo" class="sidebar-logo" />
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+    <nav>
+      <ul>
+        <li onclick="trocarSecao('dashboard')">
+          <i data-lucide="layout-dashboard"></i>
+          <span class="link-text">Dashboard</span>
+        </li>
+        <li onclick="trocarSecao('agenda')">
+          <i data-lucide="calendar-days"></i>
+          <span class="link-text">Agenda</span>
+        </li>
+        <li onclick="trocarSecao('proposta')">
+          <i data-lucide="file-text"></i>
+          <span class="link-text">Proposta</span>
+        </li>
+        <li onclick="trocarSecao('venda')">
+          <i data-lucide="shopping-cart"></i>
+          <span class="link-text">Venda</span>
+        </li>
+        <li onclick="trocarSecao('clientes')">
+          <i data-lucide="users"></i>
+          <span class="link-text">Clientes</span>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <header class="top-bar">
+    <div class="right">
+      <span id="datetime"></span>
+      <i data-lucide="bell"></i>
+      <i data-lucide="log-out" onclick="sair()"></i>
+    </div>
+  </header>
+
+  <main>
+    <section id="dashboard">
+      <h2 style="margin-bottom: 20px;">Bem-vindo à sua área de desempenho</h2>
+      
+<div class="cards">
+  <div class="card safelink1">
+    <h4>Clientes</h4>
+    <div class="value">14</div>
+    <div class="details">Clientes Ontem: 0 | Novos: 0</div>
+  </div>
+  <div class="card safelink2">
+    <h4>Vendas</h4>
+    <div class="value">14</div>
+    <div class="details">Vendas Ontem: 0</div>
+  </div>
+  <div class="card safelink3">
+    <h4>Ticket Médio Hoje</h4>
+    <div class="value">R$ 0,00</div>
+    <div class="details">Ontem: R$ 0,00</div>
+  </div>
+  <div class="card safelink4">
+    <h4>Recebimentos Hoje</h4>
+    <div class="value">R$ 0,00</div>
+    <div class="details">Ontem: R$ 0,00</div>
+  </div>
+</div>
+
+<div class="ranking">
+  <h3>Ranking de Vendas | 26/05 a 01/06</h3>
+  <table>
+    <thead>
+      <tr><th>Vendedor</th><th>Vendas</th><th>Estado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>🏆 Edmilson Paula</td><td><span class="badge gold">R$ 9.588,00</span></td><td><span class="badge">RR</span></td></tr>
+      <tr><td>🥈 Roberval Silva</td><td><span class="badge silver">R$ 4.020,00</span></td><td><span class="badge">SE</span></td></tr>
+      <tr><td>🥉 Rodrigo Nicoletti</td><td><span class="badge bronze">R$ 3.000,00</span></td><td><span class="badge">SP</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="grafico-area">
+  <div class="grafico-box">
+    <h3>Relatório Gráfico</h3>
+    <canvas id="rankingChart"></canvas>
+  </div>
+  <div class="grafico-dados">
+    <p><strong>Valor Total de Vendas:</strong> R$ 0,00</p>
+    <p><strong>Ticket Médio:</strong> R$ 0,00</p>
+    <p><strong>Quantidade de Vendas:</strong> 1</p>
+  </div>
+</div>
+
+    </section>
+    <section id="agenda" style="display: none;"><h3>Agenda</h3></section>
+    <section id="proposta" style="display: none;">
+      <h3>Propostas</h3>
+      <div class="cards">
+        <div class="card" onclick="abrirModal('modalProposta')">
+          <h4>Criar Proposta</h4>
+        </div>
+        <div class="card">
+          <h4>Listar Propostas</h4>
+        </div>
+      </div>
+    </section>
+    <section id="venda" style="display: none;">
+      <h3>Vendas</h3>
+      <div class="cards">
+        <div class="card" onclick="abrirModal('modalVenda')">
+          <h4>Criar Venda</h4>
+        </div>
+        <div class="card">
+          <h4>Listar Vendas</h4>
+        </div>
+      </div>
+    </section>
+    <section id="clientes" style="display: none;">
+      <h3>Clientes</h3>
+      <div class="cards">
+        <div class="card" onclick="abrirModal('modalCliente')">
+          <h4>Adicionar Cliente</h4>
+        </div>
+        <div class="card">
+          <h4>Listar Clientes</h4>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="scripts.js"></script>
+  <script src="index-protegido.js"></script>
+
+<!-- MODAIS -->
+<div id="modalProposta" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal('modalProposta')">&times;</span>
+    <h3>Criar Proposta</h3>
+    <input type="text" placeholder="Serviço" />
+    <input type="number" placeholder="Valor" />
+    <input type="text" placeholder="Cliente" />
+    <button>Salvar</button>
+  </div>
+</div>
+
+<div id="modalVenda" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal('modalVenda')">&times;</span>
+    <h3>Criar Venda</h3>
+    <input type="text" placeholder="Produto/Serviço" />
+    <input type="number" placeholder="Valor" />
+    <input type="text" placeholder="Cliente" />
+    <input type="date" />
+    <button>Salvar</button>
+  </div>
+</div>
+
+<div id="modalCliente" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal('modalCliente')">&times;</span>
+    <h3>Adicionar Cliente</h3>
+    <input type="text" placeholder="Nome" />
+    <input type="text" placeholder="Telefone" />
+    <input type="text" placeholder="Endereço" />
+    <input type="text" placeholder="CPF/CNPJ" />
+    <button>Salvar</button>
+  </div>
+</div>
+
+<script src="scripts.js"></script>
+<script src="index-protegido.js"></script>
+<script>lucide.createIcons(); console.log("Logout carregado");</script>
+</body>
+</html>
