@@ -105,7 +105,7 @@ document.querySelector('#modalProposta button').onclick = async () => {
     cliente: inputs[2].value
   };
 
-  const res = await fetch('http://localhost:5000/api/propostas', {
+  const res = await fetch('https://safelink-backend-89hm.onrender.com', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ document.querySelector('#modalVenda button').onclick = async () => {
     data: inputs[3].value
   };
 
-  const res = await fetch('http://localhost:5000/api/vendas', {
+  const res = await fetch('https://safelink-backend-89hm.onrender.com', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ document.querySelector('#modalCliente button').onclick = async () => {
     documento: inputs[3].value
   };
 
-  const res = await fetch('http://localhost:5000/api/clientes', {
+  const res = await fetch('https://safelink-backend-89hm.onrender.com', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
