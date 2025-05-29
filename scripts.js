@@ -1,3 +1,9 @@
+const token = localStorage.getItem('token');
+
+if (!token) {
+  // Se não tiver token, redireciona pra login
+  window.location.href = "login.html";
+}
 // Atualiza data e hora
 function atualizarHora() {
   const agora = new Date();
